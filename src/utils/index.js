@@ -27,4 +27,16 @@ const enableButton = (state) => {
   return true;
 };
 
-export default enableButton;
+const isTrunfo = (saveCards) => saveCards.some(({ trunfo }) => trunfo);
+
+const superTrunfoDelete = (saveCards) => saveCards
+  .some(({ trunfo }) => {
+    if (trunfo) return false;
+    return true;
+  });
+
+export default {
+  enableButton,
+  isTrunfo,
+  superTrunfoDelete,
+};

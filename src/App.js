@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
-import enableButton from './utils';
+import utils from './utils';
 
 class App extends React.Component {
   constructor() {
@@ -36,10 +36,9 @@ class App extends React.Component {
       form: { ...prevState.form, [name]: type === 'checkbox' ? checked : value },
     }), () => {
       const { form } = this.state;
-      const enable = enableButton(form);
       // habilita o botão salvar caso os campos estejam preenchidos;
       this.setState({
-        isSaveButtonDisabled: enable,
+        isSaveButtonDisabled: utils.enableButton(form),
       });
     });
   }
@@ -50,9 +49,6 @@ class App extends React.Component {
       saveCards: [...prevState.saveCards, form],
     }), () => {
       const { saveCards } = this.state;
-      const isTrunfo = saveCards
-        .some(({ trunfo }) => trunfo);
-
       this.setState(({
         form: {
           name: '',
@@ -64,22 +60,16 @@ class App extends React.Component {
           rare: 'normal',
           trunfo: false,
         },
-        hasTrunfo: isTrunfo,
+        hasTrunfo: utils.isTrunfo(saveCards),
       }));
     });
   }
 
   onDeleteCard({ target: { name } }) {
     const { saveCards } = this.state;
-    const isTrunfo = saveCards.some(({ trunfo }) => {
-      if (trunfo) return false;
-      return true;
-    });
-    console.log(isTrunfo);
-
     this.setState((prevState) => ({
       saveCards: prevState.saveCards.filter((card) => card.name !== name),
-      hasTrunfo: isTrunfo,
+      hasTrunfo: utils.superTrunfoDelete(saveCards),
     }));
   }
 
