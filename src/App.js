@@ -20,11 +20,17 @@ class App extends React.Component {
       isSaveButtonDisabled: true,
       saveCards: [],
       hasTrunfo: false,
+      findCard: '',
     };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     this.onDeleteCard = this.onDeleteCard.bind(this);
+    this.onFindCard = this.onFindCard.bind(this);
+  }
+
+  onFindCard({ target: { value } }) {
+    this.setState({ findCard: value });
   }
 
   onInputChange({ target: { name, type, checked, value } }) {
@@ -77,10 +83,10 @@ class App extends React.Component {
     const {
       form:
         { name, image, description, attr1, attr2, attr3, rare, trunfo },
-      isSaveButtonDisabled, saveCards, hasTrunfo,
+      isSaveButtonDisabled, saveCards, hasTrunfo, findCard,
     } = this.state;
 
-    const { onInputChange, onSaveButtonClick, onDeleteCard } = this;
+    const { onInputChange, onSaveButtonClick, onDeleteCard, onFindCard } = this;
 
     return (
       <section>
@@ -109,28 +115,43 @@ class App extends React.Component {
           cardTrunfo={ trunfo }
         />
 
-        { saveCards.map((card) => (
-          <div key={ card.name }>
-            <Card
-              cardName={ card.name }
-              cardImage={ card.image }
-              cardDescription={ card.description }
-              cardAttr1={ card.attr1 }
-              cardAttr2={ card.attr2 }
-              cardAttr3={ card.attr3 }
-              cardRare={ card.rare }
-              cardTrunfo={ card.trunfo }
+        <div>
+          <p>Todas as cartas</p>
+          <label htmlFor="filtered">
+            Filtros do busca
+            <input
+              type="text"
+              id="filtered"
+              value={ findCard }
+              name="findCard"
+              onChange={ onFindCard }
+              data-testid="name-filter"
             />
-            <button
-              name={ card.name }
-              type="button"
-              data-testid="delete-button"
-              onClick={ onDeleteCard }
-            >
-              Excluir
-            </button>
-          </div>
-        ))}
+          </label>
+          { saveCards
+            .filter((card) => card.name.includes(findCard)).map((card) => (
+              <div key={ card.name }>
+                <Card
+                  cardName={ card.name }
+                  cardImage={ card.image }
+                  cardDescription={ card.description }
+                  cardAttr1={ card.attr1 }
+                  cardAttr2={ card.attr2 }
+                  cardAttr3={ card.attr3 }
+                  cardRare={ card.rare }
+                  cardTrunfo={ card.trunfo }
+                />
+                <button
+                  name={ card.name }
+                  type="button"
+                  data-testid="delete-button"
+                  onClick={ onDeleteCard }
+                >
+                  Excluir
+                </button>
+              </div>
+            ))}
+        </div>
       </section>
     );
   }
