@@ -11,16 +11,18 @@ class App extends React.Component {
         name: '',
         image: '',
         description: '',
-        attr1: '',
-        attr2: '',
-        attr3: '',
+        attr1: '0',
+        attr2: '0',
+        attr3: '0',
         rare: 'normal',
         trunfo: false,
       },
       isSaveButtonDisabled: true,
+      saveCards: [],
     };
 
     this.onInputChange = this.onInputChange.bind(this);
+    this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
   }
 
   onInputChange({ target: { name, type, checked, value } }) {
@@ -33,9 +35,30 @@ class App extends React.Component {
     }), () => {
       const { form } = this.state;
       const enable = enableButton(form);
+      // habilita o botão salvar caso os campos estejam preenchidos;
       this.setState({
         isSaveButtonDisabled: enable,
       });
+    });
+  }
+
+  onSaveButtonClick() {
+    const { form } = this.state;
+    this.setState((prevState) => ({
+      saveCards: [...prevState.saveCards, form],
+    }), () => {
+      this.setState(({
+        form: {
+          name: '',
+          image: '',
+          description: '',
+          attr1: '0',
+          attr2: '0',
+          attr3: '0',
+          rare: 'normal',
+          trunfo: false,
+        },
+      }));
     });
   }
 
@@ -46,7 +69,7 @@ class App extends React.Component {
       isSaveButtonDisabled,
     } = this.state;
 
-    const { onInputChange } = this;
+    const { onInputChange, onSaveButtonClick } = this;
 
     return (
       <section>
@@ -61,7 +84,7 @@ class App extends React.Component {
           cardTrunfo={ trunfo }
           isSaveButtonDisabled={ isSaveButtonDisabled }
           onInputChange={ onInputChange }
-          // onSaveButtonClick
+          onSaveButtonClick={ onSaveButtonClick }
         />
         <Card
           cardName={ name }
