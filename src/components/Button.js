@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class Input extends Component {
   render() {
-    const { title, testId, name } = this.props;
+    const { title, testId, name, disabled, onClick } = this.props;
     return (
       <div>
         <button
@@ -11,6 +11,8 @@ class Input extends Component {
           type="button"
           data-testid={ testId }
           name={ name }
+          disabled={ disabled }
+          onClick={ onClick }
         >
           { title }
         </button>
@@ -23,6 +25,8 @@ Input.propTypes = {
   title: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   testId: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Input;

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class Input extends Component {
   render() {
-    const { id, title, testId, name, options } = this.props;
+    const { id, title, testId, name, options, value, onChange } = this.props;
     return (
       <div>
         <label htmlFor={ id }>
@@ -12,6 +12,8 @@ class Input extends Component {
             id={ id }
             data-testid={ testId }
             name={ name }
+            value={ value }
+            onChange={ onChange }
           >
             { options.map((item, index) => (
               <option
@@ -35,6 +37,8 @@ Input.propTypes = {
   ).isRequired,
   testId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default Input;
