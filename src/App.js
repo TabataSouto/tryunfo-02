@@ -19,6 +19,7 @@ class App extends React.Component {
       },
       isSaveButtonDisabled: true,
       saveCards: [],
+      hasTrunfo: false,
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -47,6 +48,10 @@ class App extends React.Component {
     this.setState((prevState) => ({
       saveCards: [...prevState.saveCards, form],
     }), () => {
+      const { saveCards } = this.state;
+      const isTrunfo = saveCards
+        .some(({ trunfo }) => trunfo);
+
       this.setState(({
         form: {
           name: '',
@@ -58,6 +63,7 @@ class App extends React.Component {
           rare: 'normal',
           trunfo: false,
         },
+        hasTrunfo: isTrunfo,
       }));
     });
   }
@@ -66,7 +72,7 @@ class App extends React.Component {
     const {
       form:
         { name, image, description, attr1, attr2, attr3, rare, trunfo },
-      isSaveButtonDisabled,
+      isSaveButtonDisabled, saveCards, hasTrunfo,
     } = this.state;
 
     const { onInputChange, onSaveButtonClick } = this;
@@ -85,6 +91,7 @@ class App extends React.Component {
           isSaveButtonDisabled={ isSaveButtonDisabled }
           onInputChange={ onInputChange }
           onSaveButtonClick={ onSaveButtonClick }
+          hasTrunfo={ hasTrunfo }
         />
         <Card
           cardName={ name }
@@ -96,6 +103,20 @@ class App extends React.Component {
           cardRare={ rare }
           cardTrunfo={ trunfo }
         />
+
+        { saveCards.map((card) => (
+          <Card
+            key={ card.name }
+            cardName={ card.name }
+            cardImage={ card.image }
+            cardDescription={ card.description }
+            cardAttr1={ card.attr1 }
+            cardAttr2={ card.attr2 }
+            cardAttr3={ card.attr3 }
+            cardRare={ card.rare }
+            cardTrunfo={ card.trunfo }
+          />
+        ))}
       </section>
     );
   }
