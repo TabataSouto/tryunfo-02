@@ -24,6 +24,7 @@ class App extends React.Component {
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+    this.onDeleteCard = this.onDeleteCard.bind(this);
   }
 
   onInputChange({ target: { name, type, checked, value } }) {
@@ -68,6 +69,20 @@ class App extends React.Component {
     });
   }
 
+  onDeleteCard({ target: { name } }) {
+    const { saveCards } = this.state;
+    const isTrunfo = saveCards.some(({ trunfo }) => {
+      if (trunfo) return false;
+      return true;
+    });
+    console.log(isTrunfo);
+
+    this.setState((prevState) => ({
+      saveCards: prevState.saveCards.filter((card) => card.name !== name),
+      hasTrunfo: isTrunfo,
+    }));
+  }
+
   render() {
     const {
       form:
@@ -75,7 +90,7 @@ class App extends React.Component {
       isSaveButtonDisabled, saveCards, hasTrunfo,
     } = this.state;
 
-    const { onInputChange, onSaveButtonClick } = this;
+    const { onInputChange, onSaveButtonClick, onDeleteCard } = this;
 
     return (
       <section>
@@ -105,17 +120,26 @@ class App extends React.Component {
         />
 
         { saveCards.map((card) => (
-          <Card
-            key={ card.name }
-            cardName={ card.name }
-            cardImage={ card.image }
-            cardDescription={ card.description }
-            cardAttr1={ card.attr1 }
-            cardAttr2={ card.attr2 }
-            cardAttr3={ card.attr3 }
-            cardRare={ card.rare }
-            cardTrunfo={ card.trunfo }
-          />
+          <div key={ card.name }>
+            <Card
+              cardName={ card.name }
+              cardImage={ card.image }
+              cardDescription={ card.description }
+              cardAttr1={ card.attr1 }
+              cardAttr2={ card.attr2 }
+              cardAttr3={ card.attr3 }
+              cardRare={ card.rare }
+              cardTrunfo={ card.trunfo }
+            />
+            <button
+              name={ card.name }
+              type="button"
+              data-testid="delete-button"
+              onClick={ onDeleteCard }
+            >
+              Excluir
+            </button>
+          </div>
         ))}
       </section>
     );
