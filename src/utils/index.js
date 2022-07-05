@@ -29,11 +29,14 @@ const enableButton = (state) => {
 
 const isTrunfo = (saveCards) => saveCards.some(({ trunfo }) => trunfo);
 
-const superTrunfoDelete = (saveCards) => saveCards
-  .some(({ trunfo }) => {
-    if (trunfo) return false;
-    return true;
-  });
+const superTrunfoDelete = (saveCards) => {
+  const trunfoExisted = saveCards
+    .some(({ trunfo }) => {
+      if (trunfo) return false;
+      return true;
+    });
+  return trunfoExisted;
+};
 
 export default {
   enableButton,

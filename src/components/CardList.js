@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import Card from './Card';
 import FilteredByRare from './FilteredByRare';
 import FilteredCardByName from './FilteredCardByName';
+import FilteredSuperTrunfo from './FilteredSuperTrunfo';
 
 class CardList extends Component {
   render() {
     const { findCard, onFindCard,
       findRare, onFindCardRare,
-      saveCards, onClick } = this.props;
+      saveCards, onClick, isButtonDisabled,
+      filterTrunfo, onFilterTrunfo } = this.props;
 
     return (
       <section>
@@ -17,10 +19,16 @@ class CardList extends Component {
           <FilteredCardByName
             findCard={ findCard }
             onChange={ onFindCard }
+            disabled={ isButtonDisabled }
           />
           <FilteredByRare
             findRare={ findRare }
             onChange={ onFindCardRare }
+            disabled={ isButtonDisabled }
+          />
+          <FilteredSuperTrunfo
+            checked={ filterTrunfo }
+            onChange={ onFilterTrunfo }
           />
           { saveCards
             .filter((card) => card.name.includes(findCard))
@@ -28,6 +36,13 @@ class CardList extends Component {
               if (findRare === 'todas') return saveCards;
               return cardRare.rare === findRare;
             })
+            .filter((isTrunfo) => (filterTrunfo ? isTrunfo.trunfo === true : isTrunfo))
+            // {
+            //   if (filterTrunfo) {
+            //     return isTrunfo.trunfo === true;
+            //   }
+            //   return isTrunfo;
+            // })
             .map((card) => (
               <div key={ card.name }>
                 <Card
@@ -65,6 +80,9 @@ CardList.propTypes = {
     PropTypes.object.isRequired,
   ).isRequired,
   findRare: PropTypes.string.isRequired,
+  isButtonDisabled: PropTypes.bool.isRequired,
+  filterTrunfo: PropTypes.bool.isRequired,
+  onFilterTrunfo: PropTypes.func.isRequired,
 };
 
 export default CardList;

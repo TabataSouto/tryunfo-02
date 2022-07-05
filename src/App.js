@@ -23,6 +23,8 @@ class App extends React.Component {
       hasTrunfo: false,
       findCard: '',
       findRare: 'todas',
+      isButtonDisabled: false,
+      filterTrunfo: false,
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -30,6 +32,7 @@ class App extends React.Component {
     this.onDeleteCard = this.onDeleteCard.bind(this);
     this.onFindCard = this.onFindCard.bind(this);
     this.onFindCardRare = this.onFindCardRare.bind(this);
+    this.onFilterTrunfo = this.onFilterTrunfo.bind(this);
   }
 
   onFindCardRare({ target: { value } }) {
@@ -38,6 +41,25 @@ class App extends React.Component {
 
   onFindCard({ target: { value } }) {
     this.setState({ findCard: value });
+  }
+
+  onFilterTrunfo({ target: { checked } }) {
+    this.setState({
+      filterTrunfo: checked,
+    }, () => {
+      const { filterTrunfo } = this.state;
+      this.setState({
+        isButtonDisabled: filterTrunfo === true,
+      });
+      // if (filterTrunfo === true) {
+      //   return this.setState({
+      //     isButtonDisabled: true,
+      //   });
+      // }
+      // return this.setState({
+      //   isButtonDisabled: false,
+      // });
+    });
   }
 
   onInputChange({ target: { name, type, checked, value } }) {
@@ -79,11 +101,14 @@ class App extends React.Component {
   }
 
   onDeleteCard({ target: { name } }) {
-    const { saveCards } = this.state;
     this.setState((prevState) => ({
       saveCards: prevState.saveCards.filter((card) => card.name !== name),
-      hasTrunfo: utils.superTrunfoDelete(saveCards),
-    }));
+    }), () => {
+      const { saveCards } = this.state;
+      this.setState({
+        hasTrunfo: utils.superTrunfoDelete(saveCards),
+      });
+    });
   }
 
   render() {
@@ -91,10 +116,11 @@ class App extends React.Component {
       form:
         { name, image, description, attr1, attr2, attr3, rare, trunfo },
       isSaveButtonDisabled, saveCards, hasTrunfo, findCard, findRare,
+      isButtonDisabled, filterTrunfo,
     } = this.state;
 
     const { onInputChange, onSaveButtonClick, onDeleteCard,
-      onFindCard, onFindCardRare } = this;
+      onFindCard, onFindCardRare, onFilterTrunfo } = this;
 
     return (
       <section>
@@ -130,6 +156,9 @@ class App extends React.Component {
           onFindCardRare={ onFindCardRare }
           saveCards={ saveCards }
           onClick={ onDeleteCard }
+          isButtonDisabled={ isButtonDisabled }
+          filterTrunfo={ filterTrunfo }
+          onFilterTrunfo={ onFilterTrunfo }
         />
       </section>
     );

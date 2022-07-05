@@ -5,7 +5,7 @@ const rarityLetter = ['todas', 'normal', 'raro', 'muito raro'];
 
 class FilteredByRare extends Component {
   render() {
-    const { findRare, onChange } = this.props;
+    const { findRare, onChange, disabled } = this.props;
     return (
       <label htmlFor="rare">
         <select
@@ -14,6 +14,7 @@ class FilteredByRare extends Component {
           name="findRare"
           value={ findRare }
           onChange={ onChange }
+          disabled={ disabled }
         >
           { rarityLetter.map((item, index) => (
             <option
@@ -31,6 +32,7 @@ class FilteredByRare extends Component {
 FilteredByRare.propTypes = {
   findRare: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default FilteredByRare;
