@@ -2,6 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
 import utils from './utils';
+import CardList from './components/CardList';
 
 class App extends React.Component {
   constructor() {
@@ -21,12 +22,18 @@ class App extends React.Component {
       saveCards: [],
       hasTrunfo: false,
       findCard: '',
+      findRare: 'todas',
     };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     this.onDeleteCard = this.onDeleteCard.bind(this);
     this.onFindCard = this.onFindCard.bind(this);
+    this.onFindCardRare = this.onFindCardRare.bind(this);
+  }
+
+  onFindCardRare({ target: { value } }) {
+    this.setState({ findRare: value });
   }
 
   onFindCard({ target: { value } }) {
@@ -83,10 +90,11 @@ class App extends React.Component {
     const {
       form:
         { name, image, description, attr1, attr2, attr3, rare, trunfo },
-      isSaveButtonDisabled, saveCards, hasTrunfo, findCard,
+      isSaveButtonDisabled, saveCards, hasTrunfo, findCard, findRare,
     } = this.state;
 
-    const { onInputChange, onSaveButtonClick, onDeleteCard, onFindCard } = this;
+    const { onInputChange, onSaveButtonClick, onDeleteCard,
+      onFindCard, onFindCardRare } = this;
 
     return (
       <section>
@@ -115,43 +123,14 @@ class App extends React.Component {
           cardTrunfo={ trunfo }
         />
 
-        <div>
-          <p>Todas as cartas</p>
-          <label htmlFor="filtered">
-            Filtros do busca
-            <input
-              type="text"
-              id="filtered"
-              value={ findCard }
-              name="findCard"
-              onChange={ onFindCard }
-              data-testid="name-filter"
-            />
-          </label>
-          { saveCards
-            .filter((card) => card.name.includes(findCard)).map((card) => (
-              <div key={ card.name }>
-                <Card
-                  cardName={ card.name }
-                  cardImage={ card.image }
-                  cardDescription={ card.description }
-                  cardAttr1={ card.attr1 }
-                  cardAttr2={ card.attr2 }
-                  cardAttr3={ card.attr3 }
-                  cardRare={ card.rare }
-                  cardTrunfo={ card.trunfo }
-                />
-                <button
-                  name={ card.name }
-                  type="button"
-                  data-testid="delete-button"
-                  onClick={ onDeleteCard }
-                >
-                  Excluir
-                </button>
-              </div>
-            ))}
-        </div>
+        <CardList
+          findCard={ findCard }
+          onFindCard={ onFindCard }
+          findRare={ findRare }
+          onFindCardRare={ onFindCardRare }
+          saveCards={ saveCards }
+          onClick={ onDeleteCard }
+        />
       </section>
     );
   }
